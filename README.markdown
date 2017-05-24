@@ -180,7 +180,7 @@ Use extensions to organize your code into logical blocks of functionality. Each 
 
 ### Protocol Conformance
 
- In particular, when adding protocol conformance to a model, prefer adding a separate extension for the protocol methods. This keeps the related methods grouped together with the protocol and can simplify instructions to add a protocol to a class with its associated methods.
+ In particular, when adding protocol conformance to a class, prefer adding a separate extension for the protocol methods. This keeps the related methods grouped together with the protocol and can simplify instructions to add a protocol to a class with its associated methods.
 
 **Preferred:**
 ```swift
@@ -206,9 +206,56 @@ class MyViewController: UIViewController, UITableViewDataSource, UIScrollViewDel
 }
 ```
 
-Since the compiler does not allow you to re-declare protocol conformance in a derived class, it is not always required to replicate the extension groups of the base class. This is especially true if the derived class is a terminal class and a small number of methods are being overridden. When to preserve the extension groups is left to the discretion of the author.
+For UIKit views and controllers, besides separating protocol methods into their own extesion, also separate your class into section using `// MARK: -` to group lifecycle methods, setup methods, and action methods.
 
-For UIKit view controllers, consider grouping lifecycle, custom accessors, and IBAction in separate class extensions.
+**Preferred:**
+```swift
+class MyViewController: UIViewController {
+  
+  init() {
+    // init code here..
+  }
+
+  // MARK: - Life Cycle
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    // ...
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    // ...
+  }
+  
+  // MARK: - Setup
+  
+  private func setupNavBar() {
+    // setup Navigation Bar
+  }
+  
+  private func setupRefreshController() {
+    // setup Refresh Controller
+  }
+
+  // MARK: - Action
+
+  func didTapButton(sender: Any) {
+    // do something
+  }
+
+}
+
+// MARK: - UITableView DataSource  and Delegate
+extension MyViewController: UITableViewDelegate, UITableViewDataSource {
+  // table view data source methods
+}
+
+// MARK: - UIScrollViewDelegate
+extension MyViewController: UIScrollViewDelegate {
+  // scroll view delegate methods
+}
+```
 
 ### Unused Code
 
